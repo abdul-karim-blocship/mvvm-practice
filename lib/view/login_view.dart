@@ -25,6 +25,33 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final formKey = GlobalKey<FormState>();
 
+  late AuthProvider
+      authProvider; // Declare authProvider as an instance variable
+
+  Future<void> _handleLogin() async {
+    if (formKey.currentState!.validate()) {
+      Map<String, dynamic> login = await AuthViewModel().loginUser(
+        email: emailController.text,
+        password: passController.text,
+        authProvider: authProvider,
+      );
+      if (login.containsKey('error')) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(CustomSnackBar(login['error']));
+      } else {
+        print(login);
+        Navigator.pushReplacementNamed(context, RouteNames.home);
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    authProvider = Provider.of<AuthProvider>(context,
+        listen: false); // Initialize authProvider here
+  }
+
   @override
   void dispose() {
     emailController.dispose();
@@ -81,25 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ? const Center(
                           child: CircularProgressIndicator(),
                         )
-                      : CustomFilledButton(
-                          title: 'Login',
-                          onTap: () async {
-                            if (formKey.currentState!.validate()) {
-                              Map<String, dynamic> login = await AuthViewModel()
-                                  .loginUser(
-                                      email: emailController.text,
-                                      password: passController.text,
-                                      authProvider: authProvider);
-                              if (login.containsKey('error')) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    CustomSnackBar(login['error']));
-                              } else {
-                                print(login);
-                                Navigator.pushReplacementNamed(
-                                    context, RouteNames.home);
-                              }
-                            }
-                          }))
+                      : CustomFilledButton(title: 'Login', onTap: _handleLogin))
             ],
           ),
         )),
