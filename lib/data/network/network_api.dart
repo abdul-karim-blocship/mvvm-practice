@@ -35,9 +35,9 @@ class NetworkApiService extends BaseApiService {
   dynamic returnResponse(http.Response response) {
     switch (response.statusCode) {
       case 200:
-       return response.body;
+       return jsonDecode(response.body);
       case 400:
-        throw BadRequestExceptions(response.body.toString());
+        return jsonDecode(response.body);
       case 404:
         throw BadRequestExceptions(response.body.toString());
       case 500:

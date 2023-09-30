@@ -8,7 +8,7 @@ import 'package:mvvm/res/Constants/AppUrls/app_urls.dart';
 class AuthRepo {
   BaseApiService apiService = NetworkApiService();
 
-  Future loginUser(dynamic data) async {
+  Future<Map<String, dynamic>> loginUser(dynamic data) async {
     try {
       dynamic resp = await apiService.getPostApiResp(url: AppUrls.loginUrl, body: data);
       return resp;

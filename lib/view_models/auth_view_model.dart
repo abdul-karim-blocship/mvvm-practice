@@ -1,34 +1,37 @@
 import 'package:flutter/cupertino.dart';
+import 'package:mvvm/providers/auth_provider.dart';
 import 'package:mvvm/repos/auth_repo.dart';
 
-class AuthViewModel with ChangeNotifier {
-  final myRepo = AuthRepo();
-  bool _loading = false;
-
-  get loading => _loading;
-
-  setLoading(value){
-    _loading = value;
-    notifyListeners();
+class AuthViewModel {
+  final _myRepo = AuthRepo();
+  String? validateEmail(String? str) {
+    if (str == null) {
+      return 'Email cannot be empty';
+    }
+    if (!str.contains('@')) {
+      return 'Please Enter Valid Email';
+    }
+    return null;
   }
 
-  Future<String> loginUser(data) async {
-    try {
-      final result = await myRepo.loginUser(data);
-      return result;
-    } catch (error) {
-      print(error.toString());
-      return error.toString();
+  String? validatePassword(String? str) {
+    if (str == null) {
+      return 'Password cannot be empty';
     }
+    if (str.length < 6) {
+      return 'Min. length for a password is 6 characters';
+    }
+    return null;
   }
 
-  Future<String> signupUser(data)async{
-    try {
-      final result = await myRepo.signUpUser(data);
-      return result;
-    } catch (error) {
-      print(error.toString());
-      return error.toString();
-    }
+  Future<Map<String, dynamic>> loginUser({required String email, required String password, required AuthProvider authProvider})async{
+    Map data ={
+      'email': email,
+      'password': password
+    };
+    authProvider.setLoading(true);
+    Map<String, dynamic> a = await _myRepo.loginUser(data);
+    authProvider.setLoading(false);
+    return a;
   }
 }

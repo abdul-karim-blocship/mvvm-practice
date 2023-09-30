@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mvvm/providers/auth_provider.dart';
 import 'package:mvvm/utils/routes/routes.dart';
-import 'package:mvvm/view_models/auth_view_model.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context) => AuthViewModel())],
+      providers: [ChangeNotifierProvider(create: (context) => AuthProvider())],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
