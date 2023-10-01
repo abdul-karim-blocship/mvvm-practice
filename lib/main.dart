@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mvvm/data/local/local_storage.dart';
 import 'package:mvvm/providers/auth_provider.dart';
 import 'package:mvvm/utils/routes/routes.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main()async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalStorage.getInstance().init();
+   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

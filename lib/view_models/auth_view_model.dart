@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:mvvm/data/local/local_storage.dart';
 import 'package:mvvm/providers/auth_provider.dart';
 import 'package:mvvm/repos/auth_repo.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthViewModel {
   final _myRepo = AuthRepo();
@@ -31,6 +33,9 @@ class AuthViewModel {
     };
     authProvider.setLoading(true);
     Map<String, dynamic> a = await _myRepo.loginUser(data);
+      if (a.containsKey('token')) {
+      LocalStorage.getInstance().storeToken(a['token']);
+    }
     authProvider.setLoading(false);
     return a;
   }
